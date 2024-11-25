@@ -92,7 +92,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [3] = LAYOUT(
             KC_TRNS,            KC_TRNS,        KC_TRNS,        KC_TRNS,        KC_TRNS,        KC_TRNS,            KC_TRNS,                    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,      KC_NO,
-            KC_NO,              KC_COMMA,       KC_GRAVE,       KC_AMPR,        KC_LBRC,        KC_LABK,            KC_NO,                      KC_NO,          KC_RABK,        KC_PIPE,        KC_BSLS,        KC_NO,          KC_NO,      KC_NO,
+            KC_NO,              KC_TILDE,       KC_GRAVE,       KC_AMPR,        KC_LBRC,        KC_LABK,            KC_NO,                      KC_NO,          KC_RABK,        KC_RBRC,        KC_PIPE,        KC_BSLS,        KC_NO,      KC_NO,
             KC_0,               KC_COLN,        KC_QUOTE,       KC_LPRN,        KC_LCBR,        KC_PLUS,            KC_NO,                      KC_NO,          KC_EQUAL,       KC_RCBR,        KC_RPRN,        KC_SLASH,       KC_SCLN,    KC_DLR,
             KC_TRNS,            KC_DOT,         KC_MINUS,       KC_HASH,        KC_CIRC,        KC_AT,              KC_NO,                      KC_NO,          KC_PERC,        KC_EXLM,        KC_UNDS,        KC_NO,          KC_NO,      KC_NO,
                                                 KC_NO,          KC_NO,          KC_NO,                                                                                          KC_TRNS,        KC_TRNS,        KC_TRNS
@@ -107,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             KC_TRANSPARENT,     KC_NO,      KC_NO,              KC_NO,                  KC_NO,              KC_NO,      KC_NO,                                      KC_NO,          KC_NO,          KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
             KC_NO,              KC_F1,      KC_F2,              KC_F3,                  KC_F4,              KC_F5,      KC_NO,                                      KC_NO,          KC_F6,          KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_NO,
             KC_TRANSPARENT,     KC_1,       KC_2,               KC_3,                   KC_4,               KC_5,       KC_NO,                                      KC_NO,          KC_6,           KC_7,       KC_8,       KC_9,       KC_0,       KC_NO,
-            KC_LEFT_SHIFT,      KC_F11,     KC_NO,              KC_LEFT,                KC_DOWN,            KC_NO,     KC_NO,                                       KC_NO,          KC_NO,          KC_UP,      KC_RIGHT,   KC_F12,     KC_NO,      KC_RIGHT_SHIFT,
+            KC_LEFT_SHIFT,      KC_F11,     KC_NO,              KC_LEFT,                KC_DOWN,            KC_NO,      KC_NO,                                       KC_NO,          KC_NO,         KC_UP,     KC_RIGHT,   KC_F12,     KC_NO,      KC_RIGHT_SHIFT,
                                             KC_TRANSPARENT,     KC_TRANSPARENT,         KC_TRANSPARENT,                                                                                             KC_TRNS,    KC_TRNS,    KC_TRNS
     )
 };
