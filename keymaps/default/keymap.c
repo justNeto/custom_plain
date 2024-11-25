@@ -3,9 +3,22 @@
 
 #include QMK_KEYBOARD_H
 
-enum custom_keycodes {
-    TMUX_MACRO,
+// Tap dance keycodes
+enum
+{
+    ALT_TMUX
 };
+
+typedef enum
+{
+    TD_NONE,
+    TD_UNKNOWN,
+    TD_SINGLE_TAP,
+    TD_SINGLE_HOLD
+} td_state_t;
+
+// Instantiate tapdante state for ALT_TMUX
+static td_state_t td_state;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -37,10 +50,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [0] = LAYOUT(
             TO(0),              KC_1,           KC_2,                   KC_3,                   KC_4,                   KC_5,       TG(1),                          TG(2),                      KC_6,           KC_7,               KC_8,               KC_9,           KC_0,       KC_NO,
-            TMUX_MACRO,         KC_SCLN,        KC_COMMA,               KC_DOT,                 KC_P,                   KC_Y,       KC_AUDIO_VOL_UP,                KC_AUDIO_VOL_DOWN,          KC_F,           KC_G,               KC_C,               KC_R,           KC_L,       KC_TILDE,
+            KC_NO,              KC_SCLN,        KC_COMMA,               KC_DOT,                 KC_P,                   KC_Y,       KC_AUDIO_VOL_UP,                KC_AUDIO_VOL_DOWN,          KC_F,           KC_G,               KC_C,               KC_R,           KC_L,       KC_TILDE,
             TG(4),              KC_A,           KC_O,                   KC_E,                   KC_U,                   KC_I,       KC_QUESTION,                    KC_EXCLAIM,                 KC_D,           KC_H,               KC_T,               KC_N,           KC_S,       CW_TOGG,
             KC_LEFT_SHIFT,      KC_QUOTE,       KC_Q,                   KC_J,                   KC_K,                   KC_X,       KC_PRINT_SCREEN,                KC_NO,                      KC_B,           KC_M,               KC_W,               KC_V,           KC_Z,       KC_RIGHT_SHIFT,
-                                                LGUI_T(KC_ESCAPE),      LT(3, KC_SPACE),        LCTL_T(KC_TAB),                                                                                                 KC_LEFT_ALT,        KC_BACKSPACE,       KC_ENT
+                                                LGUI_T(KC_ESCAPE),      LT(3, KC_SPACE),        LCTL_T(KC_TAB),                                                                                                 TD(ALT_TMUX),        KC_BACKSPACE,       KC_ENT
     ),
 
     /*
@@ -112,14 +125,51 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case TMUX_MACRO:
-            if (record->event.pressed) {
-                SEND_STRING(SS_LCTL(SS_TAP(X_B)));
-            }
-            break;
-
+td_state_t cur_dance(tap_dance_state_t *state)
+{
+    if (state->count == 1)
+    {
+        if (state->interrupted || !state->pressed) return TD_SINGLE_TAP;
+        else return TD_SINGLE_HOLD;
     }
-    return true;
+
+    else return TD_UNKNOWN;
+};
+
+void alt_tmux_finished(tap_dance_state_t *state, void *user_data)
+{
+    td_state = cur_dance(state);
+
+    switch (td_state)
+    {
+        case TD_SINGLE_TAP:
+            register_mods(MOD_BIT(KC_LCTL));
+            register_code(KC_B);
+            break;
+        case TD_SINGLE_HOLD:
+            register_mods(MOD_BIT(KC_LALT));
+            break;
+        default:
+            break;
+    }
+};
+
+void alt_tmux_reset(tap_dance_state_t *state, void *user_data)
+{
+    switch (td_state)
+    {
+        case TD_SINGLE_TAP:
+            unregister_code(KC_B);
+            unregister_mods(MOD_BIT(KC_LCTL));
+            break;
+        case TD_SINGLE_HOLD:
+            unregister_mods(MOD_BIT(KC_LALT));
+            break;
+        default:
+            break;
+    }
+};
+
+tap_dance_action_t tap_dance_actions[] = {
+    [ALT_TMUX] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_tmux_finished, alt_tmux_reset),
 };
